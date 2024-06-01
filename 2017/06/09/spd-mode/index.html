@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>程序员伍一的笔记</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="程序员伍一的笔记">
+  <title>SPD模式到底是什么鬼？ | 程序员伍一的笔记</title>
+  <meta name="keywords" content=" SPD ">
+  <meta name="description" content="SPD模式到底是什么鬼？ | 程序员伍一的笔记">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="每只小丑鱼，终究会成为大马哈鱼，因为他们都有颗勇敢的心！  —— 一个有梦想的码农   技术方向 Java EE、 Spring Boot、 Spring Cloud  业务方向 医疗耗材的精细化管理(HRP,WMS)+供应商协同管理等业务  联系我 Email: &#50;&#x34;&#53;&#57;&#53;&#48;&#x31;&#x38;&#x39;&#51;&#x40;&#113;">
 <meta property="og:type" content="website">
@@ -57,7 +57,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -325,12 +325,62 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-spd-mode" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why-Blog"><span class="toc-text">Why Blog</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99"><span class="toc-text">关于本站</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E7%B3%BB%E6%88%91"><span class="toc-text">联系我</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%8D%9A%E5%AE%A2%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">对博客的理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%9A%E5%AE%A2%E5%B9%B3%E5%8F%B0"><span class="toc-text">博客平台</span></a></li></ol></li></ol>
+        <h1 class="article-title">SPD模式到底是什么鬼？</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="业务知识">业务知识</a> > 
+            
+            <a  data-rel="业务知识&lt;---&gt;SPD">SPD</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">SPD</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-05-31 23:23:21'>2017-06-09 19:47</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:2.2k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#SPD%E6%A8%A1%E5%BC%8F%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%E9%AC%BC%EF%BC%9F"><span class="toc-text">SPD模式到底是什么鬼？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BB%E9%99%A2%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BC%95%E8%BF%9BSPD%E6%A8%A1%E5%BC%8F%EF%BC%9F"><span class="toc-text">医院为什么要引进SPD模式？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%81%E4%B8%9A%E6%98%AF%E5%90%A6%E5%BA%94%E8%AF%A5%E5%BC%80%E5%B1%95SPD%E6%A8%A1%E5%BC%8F%E4%B8%9A%E5%8A%A1%EF%BC%9F"><span class="toc-text">企业是否应该开展SPD模式业务？</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -343,41 +393,49 @@
     }
 </style>
 </div>
-            <h1 id="Why-Blog"><a href="#Why-Blog" class="headerlink" title="Why Blog"></a>Why Blog</h1><h2 id="关于本站"><a href="#关于本站" class="headerlink" title="关于本站"></a>关于本站</h2><p> 本站是<strong>伍一</strong>的个人站。<br> 本站围绕【技术应用】、【业务知识】、【实用工具】等几大板块，结合3-hexo主题搭建导航索引式站点，目录分类清晰明了，方便快速了解整个站点的全局。</p>
-<h3 id="联系我"><a href="#联系我" class="headerlink" title="联系我"></a>联系我</h3><blockquote>
-<p>Email: <a href="mailto:&#50;&#52;&#53;&#x39;&#x35;&#x30;&#x31;&#x38;&#57;&#51;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;">&#50;&#52;&#53;&#x39;&#x35;&#x30;&#x31;&#x38;&#57;&#51;&#x40;&#x71;&#113;&#x2e;&#99;&#111;&#x6d;</a></p>
-<p>QQ: 2459501893</p>
-</blockquote>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
-<h2 id="对博客的理解"><a href="#对博客的理解" class="headerlink" title="对博客的理解"></a>对博客的理解</h2><p>喜欢写Blog的人，会经历三个阶段。</p>
-<blockquote>
-<p>第一阶段，刚接触Blog，觉得很新鲜，试着选择一个免费空间来写。</p>
-</blockquote>
-<blockquote>
-<p>第二阶段，发现免费空间限制太多，就自己购买域名和空间，搭建独立博客。</p>
-</blockquote>
-<blockquote>
-<p>第三阶段，觉得独立博客的管理太麻烦，最好在保留控制权的前提下，让别人来管，自己只负责写文章。</p>
-</blockquote>
-<p>我们每个人的在网络上产生的数据越来越多，这些信息是我们在互联网上存在过的痕迹，值得我们认真对待。但是它们被分散分布在各个网站上。很多时候我们很难将它们聚合在一起，而且各个网站的信息排布方式也没有办法自由控制，所以我们需要一个可以由自己主宰的空间——博客。</p>
-<p>通过博客，我们可以记录自己的生活和成长的轨迹。它不像 Twitter 那样碎片化，也不像 Facebook 那样关系化，它是私人的空间。</p>
-<h2 id="博客平台"><a href="#博客平台" class="headerlink" title="博客平台"></a>博客平台</h2><p>这个博客通过 <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 生成，部署在 <a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages</a>主题 <a target="_blank" rel="noopener" href="https://github.com/yelog/hexo-theme-3-hexo">3-hexo</a> 已经在github上开源</p>
-<p><code>3-hexo</code> 主题使用交流可以加 Q群: <a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=e8cf083cc097141eaf323396f1766809b8e90ff00c67bb441898f672892f6904"><img data-ignore border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="3-hexo使用交流" title="3-hexo使用交流"></a></p>
-<p>主要功能：</p>
-<ul>
-<li>搜索支持文章标题、标签(#标签)、作者(@作者)</li>
-<li>pad&#x2F;手机等移动端适配</li>
-<li>页面全局快捷键 <a target="_blank" rel="noopener" href='http://yelog.org/2017/03/24/3-hexo-shortcuts/'>3-hexo快捷键说明</a></li>
-</ul>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="SPD模式到底是什么鬼？"><a href="#SPD模式到底是什么鬼？" class="headerlink" title="SPD模式到底是什么鬼？"></a>SPD模式到底是什么鬼？</h3><p>在国外，除了作为医院信息管理基础的HIS系统之外，一般还拥有一套与之对接的医院物流管理系统。它将医院医用物资的院内物流工作放在一个专业的物流管理平台上运营，由专业的物流服务商提供整体的医院物资物流运营管理配套服务。通过信息系统的标准化建设和院内物流流程再造，以及条码识别技术的应用，使物流作业规范简化、对管理人员素质要求降低的同时，能够提高作业效率，降低差错。这类医院物流信息系统在国外被称作SPD系统，而与之配套的管理方式被称作SPD的管理方式。 </p>
+<p>SPD是英文单词supply（供应）、processing（管理）、distribution（配送）三个英文单词首字母的缩写，它是现代医疗机构较为推崇的一种供应链管理模式，是一种以医院医用物资管理部门为主导、以物流信息技术手段为工具，通过合理使用社会资源，对全院的医用物资在院内的供应、加工、推送等院内物流的一种集中管理方法。它将信息化物流技术与医院相对复杂的现场运营有机的结合在一起，将院内医疗物资的物流管理分成三大部分：</p>
+<p>** 1） 面向供应商的采购、供应管理（supply）**</p>
+<p>采购信息的生成不再依靠人工统计计算库存缺口手工生成，而是通过SPD系统分析历史消耗、临床实际定数消耗、库存上下限、供应商响应时间等规则进行计算后自动生成。可极大地减少人工经验因素，使采购工作定期化、标准化。</p>
+<p>采购补货计划信息的传递也不再依靠传统的电话、传真等方式，而是通过SPD管理模式下的供应采购协同商务平台系统进行。院内医用物资管理系统自动生成采购补货计划后，经过医院各级领导的审批，会自动上传到供应采购协同商务平台系统上的供应商端，同时，能够实现短信、微信等实时通知供应商在医院的授权委托人。在供应商进行订单接收并制作配送单据和结算单据时，系统能够自动生成统一的条形码。此条码可在作为医院物流信息流转的基础并能够关联到产品批号、效期、数量等。</p>
+<p>具备采购信息准确、传递迅速，物流配送过程可实时追踪，验收迅捷准确等特征。另外，对于所有采购品的相关厂商、代理商资质证照以及产品自身相关的注册证、授权链文件、说明书、照片等资质证照的管理也全部实现电子化自助管理，将原本医院复杂的线下纸质管理通过互联网信息技术整合起来，为医院及供应商提升管理质量，减轻管理负担。</p>
+<p>** 2） 院内一级物流仓库的加工管理（processing）**</p>
+<p>SPD模式下的院内物流管理流程清晰、简单，通过条码技术的应用，使得院内医用物资的物流管理工作变成由普通物流服务人员即可完成。</p>
+<p>在验收入库环节，通过扫描物流装箱条码进行验收入库，在扫描的同时直接实现采购信息、配送批号信息、发票金额信息的比对工作。并自动提示医用物资库内的存放位置，简化工作流程，提高收货效率，降低差错发生。</p>
+<p>在拣货加工环节，院内物流服务人员登录院内物流精细化管理系统，系统能够自动生成相应一个消耗点的拣货标签，拣货人员根据拣货标签进行扫码拣货；拣货完成后交由加工人员进行医用物资定数包的加工，一个消耗点加工完成后，系统能够自动打印相应消耗点的推送单据。</p>
+<p>针对高值耗材以及院内循环使用物资的管理，</p>
+<p>在日常的库存管理环节中，服务人员通过手持PDA就可以实现动态盘点或循环盘点，同时，能够对盘点结果可进行批次、数量的调整，做到账物相符。</p>
+<p>** 3） 面向院内各二级消耗点推送管理（distribution）**</p>
+<p>SPD服务中心会对二级消耗点所用到的一些医用物资进行定数单元管理，并形成定数包。通过条码技术的应用，医护人员在使用的时候只需要将定数标签放置到指定回收装置内即可，无须做任何记录工作。SPD运营工作人员定期回收定数标签，扫描定数包标签即可自动完成消耗登记并生成补货指示。SPD服务中心服务人员完成库内拣货、加工后，推送到相应的二级消耗点并完成库内上架操作。SPD管理模式无需医护人员进行科室库医用物资的日常管理工作， 完全将其从繁杂的日常医用物资管理工作中解放出来。它将院内医用物资供应模式从传统的“二级消耗点申领→管理部门采购→供应商送货→仓库验收入库→仓库发货”的“拉”式模式转变为“二级消耗点扫码消耗→SPD服务中心主动补充”的“推”式模式。</p>
+<p>同时，面向医院上百个消耗单元，不同的消耗品种和消耗周期，SPD服务商会根据SPD系统对于历史数据的分析、现场消耗点的分布以及配送瓶颈（主要是院内配送的电梯能力）的峰谷时间，主动规划配送周期和配送路径，做到在保证临床供应的同时，临床库存最优化。</p>
+<p>在以上三部分物流管理的相关内容之外，SPD的服务商还要负责医院与供应商、配送商之间的结算对账。通过SPD系统对于一级库房入、出库以及临床消耗的管控，SPD模式下的结算管理可以根据供应商、商品、科室等条件自由配置结算节点。医院可以根据和配送商、供应商的购销协议，实现真正意义上的财务0库存。</p>
+<h3 id="医院为什么要引进SPD模式？"><a href="#医院为什么要引进SPD模式？" class="headerlink" title="医院为什么要引进SPD模式？"></a>医院为什么要引进SPD模式？</h3><p>SPD模式的兴起主要是因目前国家医疗体制改革所致。由于零加成政策的推行，导致医院医用物质的管理部门逐渐成为医院的成本中心；同时，传统的医用物资管理模式又是粗放和低效的。如何在提升医用物资精细化管理水平的同时，降低医院医用物资管理的人工成本压力？成为每个医院管理者必须面对的管理难题！</p>
+<p>SPD模式首先是一种医院服务模式的构建。其主要建设内容包括：针对医院量身打造出满足医院实际管理需求的管理模式建设、院内库房改造建设、信息系统建设、服务人员派驻建设等。SPD模式给医院带来的不单单是软硬件产品，最主要的是院内医用物资的服务理念。通过这种服务模式的构建，通过这种专业化的分工，能够在实现医院医用物资零资金占用的情况下，保障医院医用物资供应及时、安全；能够显著降低医院管理的各方面成本，提升医院整体运营效率；能够完全解放医护和药剂人员回归一线服务本职工作。</p>
+<h3 id="企业是否应该开展SPD模式业务？"><a href="#企业是否应该开展SPD模式业务？" class="headerlink" title="企业是否应该开展SPD模式业务？"></a>企业是否应该开展SPD模式业务？</h3><p>“目前行业内对SPD模式的讨论很多，国内也有一些相对成熟的案例，但总体仍处于探索发展阶段，而目前大型医药商业企业更多的是从服务延伸的角度来开展这一业务。但是，随着国家医改的不断深入，以下极有可能是未来的发展趋势： 医院从提升内部效果、降低成本、外购服务的角度主动推动SPD模式的发展；行业里将会出现专业从事SPD业务的第三方服务企业！”所以，您懂的！</p>
 
-        </article>
-        
-        <p>
-            <a  class="dashang" onclick="dashangToggle()">赏</a>
-        </p>
-        
-        
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 2459501893@qq.com </span>
+    </div>
+</article>
+
+
+<p>
+    <a  class="dashang" onclick="dashangToggle()">赏</a>
+</p>
+
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -386,11 +444,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 <div class="hide_box" onclick="dashangToggle()"></div>
