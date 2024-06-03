@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>ORA-01653,ORACLE表空间文件达到满值 | 程序员伍一的笔记</title>
-  <meta name="keywords" content=" Oracle ">
-  <meta name="description" content="ORA-01653,ORACLE表空间文件达到满值 | 程序员伍一的笔记">
+  <title>爬取疫苗批次信息 | 程序员伍一的笔记</title>
+  <meta name="keywords" content=" 爬虫 ">
+  <meta name="description" content="爬取疫苗批次信息 | 程序员伍一的笔记">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="每只小丑鱼，终究会成为大马哈鱼，因为他们都有颗勇敢的心！  —— 一个有梦想的码农   技术方向 Java EE、 Spring Boot、 Spring Cloud  业务方向 医疗耗材的精细化管理(HRP,WMS)+供应商协同管理等业务  联系我 Email: &#50;&#52;&#x35;&#57;&#53;&#x30;&#x31;&#x38;&#x39;&#x33;&#64;&amp;#113">
 <meta property="og:type" content="website">
@@ -573,9 +573,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-ORA-01653" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-get-vaccin-batch" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">ORA-01653,ORACLE表空间文件达到满值</h1>
+        <h1 class="article-title">爬取疫苗批次信息</h1>
     
     <div class="article-meta">
         
@@ -585,9 +585,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="数据库">数据库</a> > 
+            <a  data-rel="实用工具">实用工具</a> > 
             
-            <a  data-rel="数据库&lt;---&gt;Oracle">Oracle</a>
+            <a  data-rel="实用工具&lt;---&gt;爬虫">爬虫</a>
             
         </span>
         
@@ -595,19 +595,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color2">Oracle</a>
+            <a class="color3">爬虫</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-06-01 23:24:47'>2019-12-20 08:30</time>
+            发布时间 : <time class="date" title='最后更新: 2024-06-03 22:37:51'>2024-06-03 20:47</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:576</span>
+        <span>字数:2.6k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -626,7 +626,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A%E8%AF%B4%E6%98%8E"><span class="toc-text">解释说明</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%AD%A5%E9%AA%A4"><span class="toc-text">处理步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%9E%E4%B8%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8E%E6%9F%A5%E7%9C%8B%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%83%85%E5%86%B5"><span class="toc-text">1. 连上数据库后查看表空间情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-SYSTEM%E8%A1%A8%E7%A9%BA%E9%97%B4%E4%B8%8D%E8%B6%B3%EF%BC%8C%E6%9F%A5%E7%9C%8B%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%96%87%E4%BB%B6%E5%90%8D%E7%A7%B0%E5%92%8C%E6%98%AF%E5%90%A6%E8%87%AA%E5%8A%A8%E5%A2%9E%E9%95%BF"><span class="toc-text">2. SYSTEM表空间不足，查看表空间文件名称和是否自动增长</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BD%93%E8%A1%A8%E7%A9%BA%E9%97%B4%E4%B8%8D%E8%B6%B3%E6%97%B6"><span class="toc-text">3. 当表空间不足时</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%A0%E9%99%A4%E8%A1%A8%E7%A9%BA%E9%97%B4%E6%96%87%E4%BB%B6"><span class="toc-text">4. 删除表空间文件</span></a></li></ol></li></ol>
+        
     
 <style>
     .left-col .switch-btn,
@@ -642,51 +642,502 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>操作数据库出现错误，ORA-01653，ORA-00604: 8192</p>
-<h1 id="解释说明"><a href="#解释说明" class="headerlink" title="解释说明"></a>解释说明</h1><p>由于Oracle的Rowid使用22位来代表数据块号，因此Oracle表空间数据文件每个数据文件最多只能包含2^22个数据块。也因此数据库表空间的数据文件不是无限增长的，例如：在数据块为8k的情况下，单个数据文件的最大容量为8K×2^22 &#x3D; 32G。同理，数据块为2K，数据文件最大约8G，数据块为32，数据文件最大约16×8G，故若达到这个最大容量之后，则即便是设置了自增长，也不是无限自增长，此时则需要为这个表空间添加数据文件。</p>
-<h1 id="处理步骤"><a href="#处理步骤" class="headerlink" title="处理步骤"></a>处理步骤</h1><h2 id="1-连上数据库后查看表空间情况"><a href="#1-连上数据库后查看表空间情况" class="headerlink" title="1. 连上数据库后查看表空间情况"></a>1. 连上数据库后查看表空间情况</h2><pre><code>SELECT UPPER(F.TABLESPACE_NAME) &quot;表空间名&quot;,
-       D.TOT_GROOTTE_MB &quot;表空间大小(M)&quot;,
-       D.TOT_GROOTTE_MB - F.TOTAL_BYTES &quot;已使用空间(M)&quot;,
-       TO_CHAR(ROUND((D.TOT_GROOTTE_MB - F.TOTAL_BYTES) / D.TOT_GROOTTE_MB * 100,
-                     2),
-               &#39;990.99&#39;) &quot;使用比&quot;,
-       F.TOTAL_BYTES &quot;空闲空间(M)&quot;,
-       F.MAX_BYTES &quot;最大块(M)&quot;
-  FROM (SELECT TABLESPACE_NAME,
-               ROUND(SUM(BYTES) / (1024 * 1024), 2) TOTAL_BYTES,
-               ROUND(MAX(BYTES) / (1024 * 1024), 2) MAX_BYTES
-          FROM SYS.DBA_FREE_SPACE
-         GROUP BY TABLESPACE_NAME) F,
-       (SELECT DD.TABLESPACE_NAME,
-               ROUND(SUM(DD.BYTES) / (1024 * 1024), 2) TOT_GROOTTE_MB
-          FROM SYS.DBA_DATA_FILES DD
-         GROUP BY DD.TABLESPACE_NAME) D
- WHERE D.TABLESPACE_NAME = F.TABLESPACE_NAME
- ORDER BY 4 DESC;
+        <p>今年3月份开始，就接到通知， 根据《关于开展有关人群第二剂次脊髓灰质炎灭活疫苗补种工作的通知》国疾控卫免发〔2024〕1号文件要求，在2016年3月1日至2019年9月30日之间出生的儿童，凡无接种禁忌者，需补齐2剂次脊髓灰质炎灭活疫苗。由于我家一直是异地打针【在外漂打工，懂的都懂】，疫苗本上信息又特别有限【吐槽-六七年前的疫苗本缺陷太大了：无厂家，无备注是否口服，无备注是灭活还是减毒】，上周去打针被问及6年前的第一针是注射还是口服，瞬间被问住了，记得3年前幼儿园入学前的打针就已经被工作人员问过一次了，问脊髓灰质炎疫苗第二、三针是注射还是口服的，甲肝疫苗是活疫苗还是灭活疫苗。。。</p>
+<p>经过网上各种搜索，通过疫苗本上写的批号到网上查询追溯，最后发现在【中国食品药品检定研究院】<a target="_blank" rel="noopener" href="https://bio.nifdc.org.cn/pqf/search.do?formAction=pqfQkcx">https://bio.nifdc.org.cn/pqf/search.do?formAction=pqfQkcx</a>上可以查询，但是这个查询也太难用了，该网站需要厂家+疫苗名+批号三个条件查询，但我只知道批号，其它信息一概不知。。。</p>
+<p>作为技术人员，一怒之下，写了个爬虫，把该网站近十年公布的疫苗批次信息全都抓到本地。。。</p>
+<p>上菜：</p>
+<pre><code class="java">&lt;!-- hutool工具类--&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;cn.hutool&lt;/groupId&gt;
+   &lt;artifactId&gt;hutool-http&lt;/artifactId&gt;
+   &lt;version&gt;5.8.23&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+   &lt;groupId&gt;org.jsoup&lt;/groupId&gt;
+   &lt;artifactId&gt;jsoup&lt;/artifactId&gt;
+   &lt;version&gt;1.17.2&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+   &lt;artifactId&gt;spring-boot-starter-data-mongodb&lt;/artifactId&gt;
+&lt;/dependency&gt;
 </code></pre>
-<h2 id="2-SYSTEM表空间不足，查看表空间文件名称和是否自动增长"><a href="#2-SYSTEM表空间不足，查看表空间文件名称和是否自动增长" class="headerlink" title="2. SYSTEM表空间不足，查看表空间文件名称和是否自动增长"></a>2. SYSTEM表空间不足，查看表空间文件名称和是否自动增长</h2><pre><code>SELECT FILE_NAME,TABLESPACE_NAME,AUTOEXTENSIBLE FROM dba_data_files;
+<pre><code class="csharp">
+/**
+ * 获取疫苗批次
+ * @author zhaokk
+ * @since 2024/5/26
+ */
+public class GetVaccinBatch &#123;
+
+    public static String BASE_URL = &quot;https://bio.nifdc.org.cn/pqf/&quot;;
+
+    public static void main(String[] args) throws IOException &#123;
+        String[] listUrlArray = &#123;
+                //中国食品药品检定研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=1&quot;,
+                //北京市药品检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=5b6ea8c91cf9013d011cfdfbda100041&quot;,
+                //上海市食品药品检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=4028813a1d225be5011d2265474b0004&quot;,
+                //广东省药品检验所
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=4028813a1d225be5011d226a9159001c&quot;,
+                //四川省药品检验研究院(四川省医疗器械检测中心)
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=4028813a1d225be5011d226ba310001e&quot;,
+                //湖北省药品监督检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=4028813a1d225be5011d22697942001a&quot;,
+                //吉林省药品检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=4028813a1d225be5011d226392100002&quot;,
+                //甘肃省药品检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=4028813a1d225be5011d226c637d0020&quot;,
+                //重庆市食品药品检验检测研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=20190917c001&quot;,
+                //山东省食品药品检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=20190924c001&quot;,
+                //辽宁省药品检验检测院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=20210315c001&quot;,
+                //云南省食品药品监督检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=20210926c001&quot;,
+                //河北省药品医疗器械检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=20211011c001&quot;,
+                //浙江省食品药品检验研究院
+                &quot;search.do?formAction=pqfGsByJG&amp;parameter1=20210210c002&quot;
+        &#125;;
+
+        MongoDbUtils.connect(&quot;mongodb://127.0.0.1:27017&quot;, &quot;vaccin-batch&quot;);
+        for (String listUrl : listUrlArray) &#123;
+            //发送http请求
+            Document document = Jsoup.connect(BASE_URL+listUrl).get();
+            Elements aList = document.select(&quot;table tr td &gt; a&quot;);
+
+            for (int i = aList.size()-1; i &gt;= 0; i--) &#123;
+                Element a = aList.get(i);
+                String atext = a.text();
+                String ahref = a.attr(&quot;href&quot;);
+                String publishDateStr = atext.substring(atext.length()-11, atext.length()-1);
+                System.out.println(atext + &quot;:&quot; + ahref);
+                System.out.println(&quot;公布日期：&quot; + publishDateStr);
+
+                org.bson.Document saveLogDoc = new org.bson.Document();
+                saveLogDoc.append(&quot;notice_list_url&quot;, BASE_URL+listUrl);
+                saveLogDoc.append(&quot;notice_detail_url&quot;, BASE_URL+ahref);
+                saveLogDoc.append(&quot;notice_title&quot;, atext);
+                List&lt;org.bson.Document&gt; saveLogList = MongoDbUtils.findBy(&quot;vaccin-batch-savelog&quot;, saveLogDoc);
+                if(!saveLogList.isEmpty())&#123;
+                    System.out.println(BASE_URL+ahref + &quot;【&quot;+ atext + &quot;】已存在，跳过&quot;);
+                    continue;
+                &#125;
+
+                viewDetail(BASE_URL+ahref, atext);
+                saveLogDoc.append(&quot;publish_date&quot;, publishDateStr);
+                saveLogDoc.append(&quot;create_time&quot;, DateUtil.now());
+                MongoDbUtils.insert(&quot;vaccin-batch-savelog&quot;, saveLogDoc);
+
+            &#125;
+        &#125;
+
+    &#125;
+
+    public static void viewDetail(String noticeDetailUrl, String noticeTitle) throws IOException &#123;
+//        Document document = Jsoup.connect(noticeDetailUrl).get();
+        Connection.Response resp = Jsoup.connect(noticeDetailUrl)
+                .timeout(60000)
+                .method(Connection.Method.GET)
+                .maxBodySize(0)
+                .followRedirects(false)
+                .execute();
+        String htmlStr = new String(resp.bodyAsBytes());
+
+        Document document = Jsoup.parse(htmlStr);
+        Elements theadList = document.select(&quot;table thead tr&quot;);
+        if(theadList.isEmpty() || theadList.size() != 2)&#123;
+            throw new RuntimeException(&quot;未解析到信息&quot;);
+        &#125;
+        Elements theadCols = theadList.get(1).select(&quot;td&quot;);
+
+        Elements tbodyList = document.select(&quot;table thead + tbody tr&quot;);
+        if(tbodyList.isEmpty())&#123;
+            throw new RuntimeException(&quot;未解析到信息&quot;);
+        &#125;
+        for (Element row : tbodyList) &#123;
+            Elements cols = row.select(&quot;td&quot;);
+            if(cols.size() != theadCols.size())&#123;
+//                break;
+                System.out.println(document);
+                System.out.println(noticeDetailUrl);
+                System.out.println(row);
+                throw new RuntimeException(&quot;未解析到正确的信息&quot;);
+            &#125;
+
+            org.bson.Document mongoDoc = new org.bson.Document();
+            for (int i = 0; i &lt; cols.size(); i++) &#123;
+                String key = FieldEnum.getName(theadCols.get(i).text());
+                if(StrUtil.isBlank(key))&#123;
+                    continue;
+                &#125;
+                mongoDoc.append(key, cols.get(i).text());
+            &#125;
+            mongoDoc.append(&quot;notice_title&quot;, noticeTitle);
+            mongoDoc.append(&quot;notice_detail_url&quot;, noticeDetailUrl);
+            //保存数据库
+            MongoDbUtils.insert(&quot;vaccin-batch&quot;, mongoDoc);
+        &#125;
+    &#125;
+
+&#125;
+
+
+/**
+ * @author zhaokk
+ * @since 2024/5/26
+ */
+public enum FieldEnum &#123;
+
+    PRODUCT_NAME(&quot;产品名称&quot;, &quot;product_name&quot;),
+    SPEC(&quot;规格&quot;, &quot;spec&quot;),
+    BATCH_NO(&quot;批号&quot;, &quot;batch_no&quot;),
+    QUANTITY(&quot;签发量&quot;, &quot;quantity&quot;),
+    VALID_DATE(&quot;有效期至&quot;, &quot;valid_date&quot;),
+    PRODUCER(&quot;生产企业&quot;, &quot;producer&quot;),
+    PRODUCER_ORG(&quot;上市许可持有人&quot;, &quot;producer&quot;),
+    CHECK_NO(&quot;收检编号&quot;, &quot;check_no&quot;),
+    CERT_NO(&quot;证书编号&quot;, &quot;cert_no&quot;),
+    REPORT_NO(&quot;报告编号&quot;, &quot;report_no&quot;),
+    SIGN_DATE(&quot;签发日期&quot;, &quot;sign_date&quot;),
+    SIGN_REMARK(&quot;签发结论&quot;, &quot;sign_remark&quot;),
+    SIGN_ORG(&quot;批签发机构&quot;, &quot;sign_org&quot;)
+    ;
+
+    private String remark;
+    private String name;
+
+    FieldEnum(String remark, String name) &#123;
+        this.remark = remark;
+        this.name = name;
+    &#125;
+
+    public static String getName(String remark)&#123;
+        for(FieldEnum value : FieldEnum.values())&#123;
+            if(remark.equals(value.getRemark()))&#123;
+                return value.getName();
+            &#125;
+        &#125;
+        return null;
+    &#125;
+
+    public String getRemark() &#123;
+        return remark;
+    &#125;
+
+    public void setRemark(String remark) &#123;
+        this.remark = remark;
+    &#125;
+
+    public String getName() &#123;
+        return name;
+    &#125;
+
+    public void setName(String name) &#123;
+        this.name = name;
+    &#125;
+&#125;
 </code></pre>
-<h2 id="3-当表空间不足时"><a href="#3-当表空间不足时" class="headerlink" title="3. 当表空间不足时"></a>3. 当表空间不足时</h2><ul>
-<li>扩展表空间，当表空间文件本身较小时，可以选择扩大表空间文件的大小，sql语句：</li>
-</ul>
-<pre><code>alter database datafile &#39;D:\ORACLE\PRODUCT\ORADATA\TEST\USERS01.DBF&#39; resize 50m;
-</code></pre>
-<ul>
-<li>设置文件的自动增长，首先选择设置自增长，sql语句：</li>
-</ul>
-<pre><code>ALTER DATABASE DATAFILE &#39;E:\APP\ZHUANGB1\ORADATA\WHU\USERS01.DBF&#39; AUTOEXTEND  ON NEXT  400M MAXSIZE UNLIMITED;
-</code></pre>
-<ul>
-<li>增加数据文件，在自增长失灵了之后，需要增加数据文件，sql语句：</li>
-</ul>
-<pre><code>Alter tablespace 表空间名 add datafile ‘数据文件存放的路径’ size 数据文件大小M autoextend on next 每次自增长大小M Maxsize UNLIMITED；　　
-//示例：
-alter tablespace USER add datafile &#39;E:\app\EmmaXu\product\11.1.0\db_1\database\SDE_1.dbf&#39; size 400M autoextend off
-</code></pre>
-<h2 id="4-删除表空间文件"><a href="#4-删除表空间文件" class="headerlink" title="4. 删除表空间文件"></a>4. 删除表空间文件</h2><ul>
-<li>有时表空间文件添加错误，需要删除重新添加，sql语句：</li>
-</ul>
-<pre><code>alter tablespace WEBS_TABLESPACE drop datafile &#39;F:\temp\USERS02.DBF&#39;;
+<p>再搭配一道菜mogodb Util，不用跑什么tomcat，运行main函数直接就是开干，最后通过Navicat等工具连上随意检索。</p>
+<pre><code class="csharp">
+import com.mongodb.BasicDBObject;
+import com.mongodb.MongoWriteException;
+import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * MongoDb 操作类
+ * @author zhaokui
+ * 2018年1月31日 
+ */
+public class MongoDbUtils &#123;
+   
+   private static MongoDatabase db;
+    /** 
+     * 链接数据库 
+     *            
+     * @param uri
+     *            主机名 + 端口号
+     * @param databaseName 
+     *            数据库名称 
+     *            
+     */
+    public static void connect(String uri, String databaseName) &#123;
+        MongoClient client = MongoClients.create(uri);
+        db = client.getDatabase(databaseName);  
+    &#125; 
+    
+    public static MongoCollection&lt;Document&gt; getCollection(String collectionName)&#123;
+       return db.getCollection(collectionName);
+    &#125;
+    
+    
+    /** 
+     * 插入一个文档 
+     *  
+     * @param document 
+     *            文档 
+     */  
+    public static void insert(String collectionName, Document document) &#123;  
+       getCollection(collectionName).insertOne(document);  
+    &#125;
+    /** 
+     * 插入一个文档 
+     *  
+     * @param document 
+     *            文档 
+     */  
+    public static void insertv2(String collectionName, Document document) throws Exception &#123;  
+          try&#123;
+             getCollection(collectionName).insertOne(document);
+          &#125;catch(MongoWriteException e) &#123;
+             e.printStackTrace();
+          &#125;
+    &#125;  
+    
+    /**
+     * 查找对象 - 根据主键_id
+     * 
+     * @param collectionName
+     * @param id
+     * @return
+     */
+    public static Document findById(String collectionName, String id) &#123;
+        ObjectId _idobj = null;
+        try &#123;
+            _idobj = new ObjectId(id);
+        &#125; catch (Exception e) &#123;
+            return null;
+        &#125;
+        Document myDoc = getCollection(collectionName).find(Filters.eq(&quot;_id&quot;, _idobj)).first();
+        return myDoc;
+    &#125;
+  
+    /** 
+     * 查询所有文档 
+     *  
+     * @return 所有文档集合 
+     */  
+    public static List&lt;Document&gt; findAll(String collectionName) &#123;  
+        List&lt;Document&gt; results = new ArrayList&lt;Document&gt;();  
+        FindIterable&lt;Document&gt; iterables = getCollection(collectionName).find();  
+        MongoCursor&lt;Document&gt; cursor = iterables.iterator();  
+        while (cursor.hasNext()) &#123;  
+            results.add(cursor.next());  
+        &#125;  
+  
+        return results;  
+    &#125;  
+  
+    /** 
+     * 查询所有文档 
+     *  
+     * @return 所有文档集合 
+     */  
+    public static List&lt;Document&gt; findAll(String collectionName, Bson orderBy) &#123;  
+        List&lt;Document&gt; results = new ArrayList&lt;Document&gt;();  
+        FindIterable&lt;Document&gt; iterables = getCollection(collectionName).find().sort(orderBy);  
+        MongoCursor&lt;Document&gt; cursor = iterables.iterator();  
+        while (cursor.hasNext()) &#123;  
+            results.add(cursor.next());  
+        &#125;  
+  
+        return results;  
+    &#125; 
+    
+    /** 
+     * 根据条件查询 
+     *  
+     * @param filter 
+     *            查询条件 //注意Bson的几个实现类，BasicDBObject, BsonDocument, 
+     *            BsonDocumentWrapper, CommandResult, Document, RawBsonDocument 
+     * @return 返回集合列表 
+     */  
+    public static List&lt;Document&gt; findBy(String collectionName, Bson filter) &#123;  
+        List&lt;Document&gt; results = new ArrayList&lt;Document&gt;();  
+        FindIterable&lt;Document&gt; iterables = getCollection(collectionName).find(filter);
+        MongoCursor&lt;Document&gt; cursor = iterables.iterator();  
+        while (cursor.hasNext()) &#123;  
+            results.add(cursor.next());  
+        &#125;  
+  
+        return results;  
+    &#125;  
+    
+    /** 
+     * 根据条件查询 + 排序
+     *  
+     * @param filter 
+     *            查询条件 //注意Bson的几个实现类，BasicDBObject, BsonDocument, 
+     *            BsonDocumentWrapper, CommandResult, Document, RawBsonDocument 
+     * @return 返回集合列表 
+     */  
+    public static List&lt;Document&gt; findBy(String collectionName, Bson filter, Bson orderBy) &#123;  
+        List&lt;Document&gt; results = new ArrayList&lt;Document&gt;();  
+        FindIterable&lt;Document&gt; iterables = getCollection(collectionName).find(filter).sort(orderBy);  
+        MongoCursor&lt;Document&gt; cursor = iterables.iterator();  
+        while (cursor.hasNext()) &#123;  
+            results.add(cursor.next());  
+        &#125;  
+  
+        return results;  
+    &#125;  
+    
+    public static List&lt;Document&gt; findBy(String collectionName, Bson filter, Bson orderBy, int pageSize) &#123;  
+        List&lt;Document&gt; results = new ArrayList&lt;Document&gt;();  
+        FindIterable&lt;Document&gt; iterables = getCollection(collectionName).find(filter).sort(orderBy).limit(pageSize);  
+        MongoCursor&lt;Document&gt; cursor = iterables.iterator();  
+        while (cursor.hasNext()) &#123;  
+            results.add(cursor.next());  
+        &#125;  
+        return results;  
+    &#125;  
+    
+    /** 统计数 */
+    public static long getCount(String collectionName, Bson filter) &#123;
+        return getCollection(collectionName).countDocuments(filter);
+    &#125;
+    
+    /** 分页查询 */
+    public static List&lt;Document&gt; findByPage(String collectionName, Bson filter, int pageNo, int pageSize) &#123;
+       List&lt;Document&gt; results = new ArrayList&lt;Document&gt;();  
+        Bson orderBy = new BasicDBObject(&quot;_id&quot;, -1);
+        MongoCursor&lt;Document&gt; cursor = getCollection(collectionName).find(filter).sort(orderBy).skip((pageNo - 1) * pageSize).limit(pageSize).iterator();
+        while (cursor.hasNext()) &#123;  
+            results.add(cursor.next());  
+        &#125; 
+        return results;  
+    &#125;
+    
+    /** 分页查询+排序 */
+    public static List&lt;Document&gt; findByPage(String collectionName, Bson filter, Bson orderBy, int pageNo, int pageSize) &#123;
+       List&lt;Document&gt; results = new ArrayList&lt;Document&gt;();  
+        MongoCursor&lt;Document&gt; cursor = getCollection(collectionName).find(filter).sort(orderBy).skip((pageNo - 1) * pageSize).limit(pageSize).iterator();
+        while (cursor.hasNext()) &#123;  
+            results.add(cursor.next());  
+        &#125; 
+        return results;  
+    &#125;
+  
+    /** 
+     * 更新查询到的第一个 
+     *  
+     * @param filter 
+     *            查询条件 
+     * @param update 
+     *            更新文档 
+     * @return 更新结果 
+     */  
+    public static UpdateResult updateOne(String collectionName, Bson filter, Bson update) &#123;  
+        UpdateResult result = getCollection(collectionName).updateOne(filter, update);  
+  
+        return result;  
+    &#125;  
+  
+    /** 
+     * 更新查询到的所有的文档 
+     *  
+     * @param filter 
+     *            查询条件 
+     * @param update 
+     *            更新文档 
+     * @return 更新结果 
+     */  
+    public static UpdateResult updateMany(String collectionName, Bson filter, Bson update) &#123;  
+        UpdateResult result = getCollection(collectionName).updateMany(filter, update);  
+  
+        return result;  
+    &#125;  
+    
+    /**
+     * FIXME
+     * 
+     * @param collectionName
+     * @param id
+     * @param newdoc
+     * @return
+     */
+    public static Document updateById(String collectionName, String id, Document newdoc) &#123;
+        ObjectId _idobj = null;
+        try &#123;
+            _idobj = new ObjectId(id);
+        &#125; catch (Exception e) &#123;
+            return null;
+        &#125;
+        Bson filter = Filters.eq(&quot;_id&quot;, _idobj);
+        // coll.replaceOne(filter, newdoc); // 完全替代
+        getCollection(collectionName).updateOne(filter, new Document(&quot;$set&quot;, newdoc));
+        return newdoc;
+    &#125;
+  
+    /** 
+     * 更新一个文档, 结果是replacement是新文档，老文档完全被替换 
+     *  
+     * @param filter 
+     *            查询条件 
+     * @param replacement 
+     *            跟新文档 
+     */  
+    public static void replace(String collectionName, Bson filter, Document replacement) &#123;  
+        getCollection(collectionName).replaceOne(filter, replacement);  
+    &#125;  
+  
+    /** 
+     * 根据条件删除一个文档 
+     *  
+     * @param filter 
+     *            查询条件 
+     */  
+    public static void deleteOne(String collectionName, Bson filter) &#123;  
+        getCollection(collectionName).deleteOne(filter);  
+    &#125;  
+  
+    /** 
+     * 根据条件删除多个文档 
+     *  
+     * @param filter 
+     *            查询条件 
+     */  
+    public static void deleteMany(String collectionName, Bson filter) &#123;  
+        getCollection(collectionName).deleteMany(filter);  
+    &#125; 
+      
+    /**
+     * 通过ID删除
+     * 
+     * @param collectionName
+     * @param id
+     * @return
+     */
+    public static long deleteById(String collectionName, String id) &#123;
+       long count = 0;
+        ObjectId _id = null;
+        try &#123;
+            _id = new ObjectId(id);
+        &#125; catch (Exception e) &#123;
+            return 0;
+        &#125;
+        Bson filter = Filters.eq(&quot;_id&quot;, _id);
+        DeleteResult deleteResult = getCollection(collectionName).deleteOne(filter);
+        count = deleteResult.getDeletedCount();
+        return count;
+    &#125;
+       
+&#125;
 </code></pre>
 
       
