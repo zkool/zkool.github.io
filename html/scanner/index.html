@@ -6,7 +6,8 @@
 <body>
     <div>
        <span>WebSocket Server ws://</span> <input type="text" id="ws_input" /> <input type="button" value="连接" onclick="connectServer()" id="connect_but" >
-       <a href="https://mp.weixin.qq.com/s/TAMKg-UtxGTqg3rNmBqAVg" target="_blank">使用教程</a>
+       <a href="https://mp.weixin.qq.com/s/TAMKg-UtxGTqg3rNmBqAVg" target="_blank">使用教程</a> | 
+       <a href="/html/scanner/pda.html" target="_blank">PDA扫码</a>
     </div>
     <div>
         <textarea style="width:496px;height: 100px;margin-top: 5px;" id="ws_textarea"></textarea>
@@ -180,7 +181,7 @@ function printScanResultPretty(codeId, decodedText, decodedResult) {
         };
 
         socket.onerror = function(event) {
-            appendTextarea("无法连接到WebSocket Server:" + socket_ip);
+            appendTextarea("无法连接到WebSocket Server:" + h5_barcode_gun_socket_ip);
         };
     }
 

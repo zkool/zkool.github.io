@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>H5扫码枪-PDA-WEB端</title>
+<body>
+    <div>
+       <span>WebSocket Server ws://</span> <input type="text" id="ws_input" style="width: 340px;height: 30px;"/> <input type="button" value="连接" onclick="connectServer()" id="connect_but" >
+       <a href="https://mp.weixin.qq.com/s/TAMKg-UtxGTqg3rNmBqAVg" target="_blank">使用教程</a>
+    </div>
+    <div style="margin-top: 8px;">
+        <span>请扫描或输入内容：</span> <input type="text" id="barcode_input" onchange="sendMsgInput()" onkeypress="if(event.keyCode == 13){ sendMsgInput(); return false;}" style="width: 377px;height: 30px;"/> <input type="button" value="发送到电脑" onclick="sendMsgInput()" id="send_but" >
+    </div>
+    <div>
+        <textarea style="width:526px;height: 150px;margin-top: 8px;" id="ws_textarea"></textarea>
+    </div>
+  
+
+</body>
+
+<script>
+
+    document.getElementById("barcode_input").focus();
+       
+    var socket;
+
+    function connectServer(){
+        var h5_barcode_gun_socket_ip = localStorage.getItem("h5_barcode_gun_socket_ip");
+        if(h5_barcode_gun_socket_ip){
+            document.getElementById("ws_input").value = h5_barcode_gun_socket_ip;
+        }else{
+            h5_barcode_gun_socket_ip = document.getElementById("ws_input").value;
+            if(!h5_barcode_gun_socket_ip){
+                appendTextarea("请填写WebSocket Server");
+                return;
+            }
+
+        }
+
+        socket = new WebSocket('ws://'+h5_barcode_gun_socket_ip);
+        // socket = new WebSocket('ws://192.168.123.101:2024');
+        socket.onopen = function(event){
+            appendTextarea("连接WebSocket Server成功!");
+            document.getElementById("connect_but").disabled = true;
+            localStorage.setItem("h5_barcode_gun_socket_ip", h5_barcode_gun_socket_ip);
+        };
+
+        // 监听消息
+        socket.onmessage = function(event){
+            console.log('Client received a message',event);
+            console.log(event.data);
+            appendTextarea(event.data);
+        };
+
+        // 监听Socket的关闭
+        socket.onclose = function(event){
+
+        };
+
+        socket.onerror = function(event) {
+            appendTextarea("无法连接到WebSocket Server:" + h5_barcode_gun_socket_ip);
+        };
+    }
+
+    connectServer()
+
+    function sendMsg(msg){
+        try {
+            socket.send(msg);
+            appendTextarea("发送消息:" + msg);
+        } catch (error) {
+            appendTextarea("请先连接WebSocket Server");
+        }
+
+    }
+
+    function appendTextarea(text){
+        var ws_textarea = document.getElementById("ws_textarea");
+        ws_textarea.value = (ws_textarea.value?ws_textarea.value + "\n":"") + text ;
+    }
+
+    function sendMsgInput(){
+        var barcode_input = document.getElementById("barcode_input");
+        if(!barcode_input.value){
+            appendTextarea("请扫描或输入内容");
+            barcode_input.focus();
+            return;
+        }
+        sendMsg(barcode_input.value);
+        barcode_input.value = '';
+        barcode_input.focus();
+
+    }
+
+</script>
+</head>
+</html>
