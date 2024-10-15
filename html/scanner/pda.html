@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>H5扫码枪-PDA-WEB端</title>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?63bc2ef27984b3f99d7c9c3cef8d26be";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>    
 <body>
     <div>
        <span>WebSocket Server ws://</span> <input type="text" id="ws_input" style="width: 340px;height: 30px;"/> <input type="button" value="连接" onclick="connectServer()" id="connect_but" >
@@ -93,5 +103,4 @@
     }
 
 </script>
-</head>
 </html>
