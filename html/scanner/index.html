@@ -159,16 +159,16 @@ function printScanResultPretty(codeId, decodedText, decodedResult) {
     var socket;
 
     function connectServer(){
-        var h5_barcode_gun_socket_ip = localStorage.getItem("h5_barcode_gun_socket_ip");
-        if(h5_barcode_gun_socket_ip){
-            document.getElementById("ws_input").value = h5_barcode_gun_socket_ip;
-        }else{
-            h5_barcode_gun_socket_ip = document.getElementById("ws_input").value;
-            if(!h5_barcode_gun_socket_ip){
-                appendTextarea("请填写WebSocket Server");
-                return;
+        var h5_barcode_gun_socket_ip = document.getElementById("ws_input").value;
+        if(!h5_barcode_gun_socket_ip){
+            h5_barcode_gun_socket_ip = localStorage.getItem("h5_barcode_gun_socket_ip");
+            if(h5_barcode_gun_socket_ip){
+                document.getElementById("ws_input").value = h5_barcode_gun_socket_ip;
             }
-
+        }
+        if(!h5_barcode_gun_socket_ip){
+            appendTextarea("请填写WebSocket Server");
+            return;
         }
 
         socket = new WebSocket('ws://'+h5_barcode_gun_socket_ip);
