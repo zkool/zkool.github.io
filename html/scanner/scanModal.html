@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手机H5扫一扫</title>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+<button onclick="showExampleModal()">弹窗示例</button>
+<button onclick="showExampleScanModal()">扫一扫</button>
+
+<div id="qr-reader-results"></div>
+
+<script src="html5-qrcode.min.js"></script>
+<script src="ScanModal.js"></script>
+
+<script>
+
+    // 示例调用
+    function showExampleModal() {
+        showBaseModal('温馨提示', '这是一个封装好的弹窗组件', () => {
+            console.log('用户点击了确认');
+        });
+    }
+
+    // 示例调用
+    var codeId = 0;
+    function showExampleScanModal() {
+        showScanModal((decodedText, decodedResult) => {
+            console.log(`Scan result ${decodedText}`, decodedResult);
+            codeId++;
+            printScanResultPretty(codeId, decodedText, decodedResult);
+        });
+    }
+
+
+    /** Ugly function to write the results to a table dynamically. */
+    function printScanResultPretty(codeId, decodedText, decodedResult) {
+        let resultSection = document.getElementById('qr-reader-results');
+        let tableBodyId = "scanned-result-table-body";
+        if (!document.getElementById(tableBodyId)) {
+            let table = document.createElement("table");
+            table.className = "styled-table";
+            table.style.width = "100%";
+            resultSection.appendChild(table);
+            let theader = document.createElement('thead');
+            let trow = document.createElement('tr');
+            let th1 = document.createElement('td');
+            th1.innerText = "Count";
+            let th2 = document.createElement('td');
+            th2.innerText = "Format";
+            let th3 = document.createElement('td');
+            th3.innerText = "Result";
+            trow.appendChild(th1);
+            trow.appendChild(th2);
+            trow.appendChild(th3);
+            theader.appendChild(trow);
+            table.appendChild(theader);
+            let tbody = document.createElement("tbody");
+            tbody.id = tableBodyId;
+            table.appendChild(tbody);
+        }
+        let tbody = document.getElementById(tableBodyId);
+        let trow = document.createElement('tr');
+        let td1 = document.createElement('td');
+        td1.innerText = `${codeId}`;
+        let td2 = document.createElement('td');
+        td2.innerText = `${decodedResult.result.format.formatName}`;
+        let td3 = document.createElement('td');
+        td3.innerText = `${decodedText}`;
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        tbody.appendChild(trow);
+    }
+</script>
+</body>
+</html>
