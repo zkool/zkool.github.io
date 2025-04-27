@@ -16,7 +16,7 @@
 
 <body>
     <div>
-       <span>WebSocket Server ws://</span> <input type="text" id="ws_input" /> <input type="button" value="连接" onclick="connectServer()" id="connect_but" >
+       <span>WebSocket Server wss://</span> <input type="text" id="ws_input" /> <input type="button" value="连接" onclick="connectServer()" id="connect_but" >
        <a href="https://mp.weixin.qq.com/s/TAMKg-UtxGTqg3rNmBqAVg" target="_blank">使用教程</a> | 
        <a href="/html/scanner/pda.html" target="_blank">PDA扫码</a> | 
        <a href="/html/scanner/scanModal.html" target="_blank">手机H5扫一扫</a>
@@ -172,7 +172,7 @@ function printScanResultPretty(codeId, decodedText, decodedResult) {
             return;
         }
 
-        socket = new WebSocket('ws://'+h5_barcode_gun_socket_ip);
+        socket = new WebSocket('wss://'+h5_barcode_gun_socket_ip);
         // socket = new WebSocket('ws://192.168.123.101:2024');
         socket.onopen = function(event){
             appendTextarea("连接WebSocket Server成功!");
