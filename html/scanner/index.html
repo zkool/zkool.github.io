@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>H5扫码枪-WEB端</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="vconsole.min.js"></script>
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -22,13 +24,15 @@
        <a href="/html/scanner/scanModal.html" target="_blank">手机H5扫一扫</a>
     </div>
     <div>
-        <textarea style="width:496px;height: 100px;margin-top: 5px;" id="ws_textarea"></textarea>
+        <textarea style="width:96%;height: 100px;margin-top: 5px;" id="ws_textarea"></textarea>
     </div>
-    <div id="qr-reader" style="width:500px"></div>
+    <div id="qr-reader" style="width:97.6%"></div>
     <div id="qr-reader-results"></div>
 </body>
 <script src="html5-qrcode.min.js"></script>
 <script>
+     //初始化一下就可以了，
+    let vConsole = new VConsole();
     function docReady(fn) {
         // see if DOM is already available
         if (document.readyState === "complete"
