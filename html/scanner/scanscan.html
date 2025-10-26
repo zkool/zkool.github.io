@@ -22,75 +22,112 @@
 <script src="html5-qrcode.min.js"></script>
 
 <script>
+/* 
+const html5QrCode = new Html5Qrcode("qr-reader");
+const config = { fps: 10, qrbox: { width: 250, height: 250 }, showTorchButtonIfSupported: true };
+html5QrCode.start({ facingMode: "environment" }, config, function(decodedText, decodedResult){
+    //弹窗 iframe 向父页面发消息
+    parent.postMessage({pluginMessage: decodedText}, '*')
+    // html5QrCode.stop();
+}); */
 
-function docReady(fn) {
-    // see if DOM is already available
-    if (document.readyState === "complete"
-        || document.readyState === "interactive") {
-        // call on next available tick
-        setTimeout(fn, 1);
-    } else {
-        document.addEventListener("DOMContentLoaded", fn);
+
+    function docReady(fn) {
+        // see if DOM is already available
+        if (document.readyState === "complete"
+            || document.readyState === "interactive") {
+            // call on next available tick
+            setTimeout(fn, 1);
+        } else {
+            document.addEventListener("DOMContentLoaded", fn);
+        }
     }
-}
 
-docReady(function() {
-	var lastMessage;
-	function onScanSuccess(decodedText, decodedResult) {
-	    console.log('扫描结果decodedText', decodedText);
-	    console.log('扫描结果decodedResult', decodedResult);
 
-        /**
-         * If you following the code example of this page by looking at the
-         * source code of the demo page - good job!!
-         * 
-         * Tip: update this function with a success callback of your choise.
-         */
-		if (lastMessage !== decodedText) {
-			lastMessage = decodedText;
-            //弹窗 iframe 向父页面发消息
-            parent.postMessage({pluginMessage: decodedText}, '*')
-            html5QrcodeScanner.clear();
-		}
-	}
-
-    var qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
-        // Square QR Box, with size = 80% of the min edge.
-        var minEdgeSizeThreshold = 250;
-        var edgeSizePercentage = 0.75;
-        var minEdgeSize = (viewfinderWidth > viewfinderHeight) ?
-            viewfinderHeight : viewfinderWidth;
-        var qrboxEdgeSize = Math.floor(minEdgeSize * edgeSizePercentage);
-        if (qrboxEdgeSize < minEdgeSizeThreshold) {
-            if (minEdgeSize < minEdgeSizeThreshold) {
-                return {width: minEdgeSize, height: minEdgeSize};
-            } else {
-                return {
-                    width: minEdgeSizeThreshold,
-                    height: minEdgeSizeThreshold
-                };
+    docReady(function() {
+        var lastMessage;
+        var codeId = 0;
+        function onScanSuccess(decodedText, decodedResult) {
+            // console.log('扫描结果decodedText', decodedText);
+	        // console.log('扫描结果decodedResult', decodedResult);
+            /**
+             * If you following the code example of this page by looking at the
+             * source code of the demo page - good job!!
+             *
+             * Tip: update this function with a success callback of your choise.
+             */
+            if (lastMessage !== decodedText) {
+                lastMessage = decodedText;
+                ++codeId;
+                //弹窗 iframe 向父页面发消息
+                parent.postMessage({pluginMessage: decodedText}, '*');
+                html5QrcodeScanner.clear();
             }
         }
-        return {width: qrboxEdgeSize, height: qrboxEdgeSize};
-    }
+        var qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
+            // console.log("viewfinderWidth",viewfinderWidth)
+            // console.log("viewfinderHeight",viewfinderHeight)
+            // Square QR Box, with size = 80% of the min edge.
+            var minEdgeSizeThreshold = 250;
+            var edgeSizePercentage = 0.75;
+            var minEdgeSize = (viewfinderWidth > viewfinderHeight) ?
+                viewfinderHeight : viewfinderWidth;
+            var qrboxEdgeSize = Math.floor(minEdgeSize * edgeSizePercentage);
+            if (qrboxEdgeSize < minEdgeSizeThreshold) {
+                if (minEdgeSize < minEdgeSizeThreshold) {
+                    return {width: minEdgeSize, height: minEdgeSize};
+                } else {
+                    return {
+                        width: minEdgeSizeThreshold,
+                        height: minEdgeSizeThreshold
+                    };
+                }
+            }
+            return {width: qrboxEdgeSize, height: qrboxEdgeSize};
+        }
+        let html5QrcodeScanner = new Html5QrcodeScanner(
+            "qr-reader",
+            {
+                fps: 10,
+                qrbox: qrboxFunction,
+                // Important notice: this is experimental feature, use it at your
+                // own risk. See documentation in
+                // mebjas@/html5-qrcode/src/experimental-features.ts
+                experimentalFeatures: {
+                    useBarCodeDetectorIfSupported: true
+                },
+                rememberLastUsedCamera: true,
+                showTorchButtonIfSupported: true,
+                showZoomSliderIfSupported: true,
+            });
+        html5QrcodeScanner.render(onScanSuccess);
 
-	let html5QrcodeScanner = new Html5QrcodeScanner(
-        "qr-reader", 
-        { 
-            fps: 10,
-            qrbox: qrboxFunction,
-            // Important notice: this is experimental feature, use it at your
-            // own risk. See documentation in
-            // mebjas@/html5-qrcode/src/experimental-features.ts
-            experimentalFeatures: {
-                useBarCodeDetectorIfSupported: true
-            },
-            rememberLastUsedCamera: true,
-            showTorchButtonIfSupported: true
-        });
-	html5QrcodeScanner.render(onScanSuccess);
-});
+
+
+        setTimeout(function () {
+            let permBut = document.getElementById('html5-qrcode-button-camera-permission');
+            if(permBut){
+                //无权限，则触发开启权限
+                permBut.click();
+                setTimeout(function () {
+                    let startBut = document.getElementById('html5-qrcode-button-camera-start');
+                    if(startBut){
+                        startBut.click();
+                    }
+                }, 2000)
+            }else{
+                //已有权限，则开始扫描
+                let startBut = document.getElementById('html5-qrcode-button-camera-start');
+                if(startBut){
+                    startBut.click();
+                }
+            }
+        }, 1000)
+
+    });
+
 
 </script>
+    
 </body>
 </html>

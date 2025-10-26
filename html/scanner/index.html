@@ -26,7 +26,7 @@
     <div>
         <textarea style="width:96%;height: 100px;margin-top: 5px;" id="ws_textarea"></textarea>
     </div>
-    <div id="qr-reader" style="width:97.6%"></div>
+    <div id="qr-reader" style="width:500px"></div>
     <div id="qr-reader-results"></div>
 </body>
 <script src="html5-qrcode.min.js"></script>
@@ -124,6 +124,7 @@ docReady(function() {
 //010505047461080420131730031311250313213166032511240ICB00I0225
 //]C10250195500913501412087756200797210B212100001
 let ruleBaseList = initRuleBase();
+console.log(JSON.stringify(ruleBaseList))
 // printScanResultPretty(1, ']C10250195500913501412087756200797210B212100001', {result: {format: {formatName:'CODE_128'}}}, ruleBaseList);
 // printScanResultPretty(1, '010505047461080420131730031311250313213166032511240ICB00I0225', {result: {format: {formatName:'CODE_128'}}}, ruleBaseList);
 // printScanResultPretty(1, 'abgdfsdfds', {result: {format: {formatName:'CODE_128'}}}, ruleBaseList);
