@@ -13,42 +13,84 @@
           s.parentNode.insertBefore(hm, s);
         })();
     </script>
-    <style>
-        /* 基础样式 */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+
 </head>
 <body>
 
-<button onclick="showExampleScanModal()">扫一扫</button>
+<div id="qr-reader" style="width:97.6%"></div>
 
 <script src="html5-qrcode.min.js"></script>
-<script src="ScanModal.js"></script>
 
 <script>
 
-    // 示例调用
-    var codeId = 0;
-    function showExampleScanModal() {
-        showScanModal((decodedText, decodedResult) => {
-            console.log(`Scan result ${decodedText}`, decodedResult);
-            codeId++;
-            printScanResultPretty(codeId, decodedText, decodedResult);
+function docReady(fn) {
+    // see if DOM is already available
+    if (document.readyState === "complete"
+        || document.readyState === "interactive") {
+        // call on next available tick
+        setTimeout(fn, 1);
+    } else {
+        document.addEventListener("DOMContentLoaded", fn);
+    }
+}
+
+docReady(function() {
+	var lastMessage;
+	function onScanSuccess(decodedText, decodedResult) {
+	    console.log('扫描结果decodedText', decodedText);
+	    console.log('扫描结果decodedResult', decodedResult);
+
+        /**
+         * If you following the code example of this page by looking at the
+         * source code of the demo page - good job!!
+         * 
+         * Tip: update this function with a success callback of your choise.
+         */
+		if (lastMessage !== decodedText) {
+			lastMessage = decodedText;
+            //弹窗 iframe 向父页面发消息
+            parent.postMessage({pluginMessage: decodedText}, '*')
+            html5QrcodeScanner.clear();
+		}
+	}
+
+    var qrboxFunction = function(viewfinderWidth, viewfinderHeight) {
+        // Square QR Box, with size = 80% of the min edge.
+        var minEdgeSizeThreshold = 250;
+        var edgeSizePercentage = 0.75;
+        var minEdgeSize = (viewfinderWidth > viewfinderHeight) ?
+            viewfinderHeight : viewfinderWidth;
+        var qrboxEdgeSize = Math.floor(minEdgeSize * edgeSizePercentage);
+        if (qrboxEdgeSize < minEdgeSizeThreshold) {
+            if (minEdgeSize < minEdgeSizeThreshold) {
+                return {width: minEdgeSize, height: minEdgeSize};
+            } else {
+                return {
+                    width: minEdgeSizeThreshold,
+                    height: minEdgeSizeThreshold
+                };
+            }
+        }
+        return {width: qrboxEdgeSize, height: qrboxEdgeSize};
+    }
+
+	let html5QrcodeScanner = new Html5QrcodeScanner(
+        "qr-reader", 
+        { 
+            fps: 10,
+            qrbox: qrboxFunction,
+            // Important notice: this is experimental feature, use it at your
+            // own risk. See documentation in
+            // mebjas@/html5-qrcode/src/experimental-features.ts
+            experimentalFeatures: {
+                useBarCodeDetectorIfSupported: true
+            },
+            rememberLastUsedCamera: true,
+            showTorchButtonIfSupported: true
         });
-    }
+	html5QrcodeScanner.render(onScanSuccess);
+});
 
-
-    /** Ugly function to write the results to a table dynamically. */
-    function printScanResultPretty(codeId, decodedText, decodedResult) {
-        //弹窗 iframe 向父页面发消息
-        parent.postMessage({pluginMessage: decodedText}, '*')
-    }
-
-    showExampleScanModal();
 </script>
 </body>
 </html>
