@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>H5扫码枪-PDA-WEB端</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script>
         var _hmt = _hmt || [];
         (function() {
@@ -22,7 +23,7 @@
         <span>请扫描或输入内容：</span> <input type="text" id="barcode_input" onchange="sendMsgInput()" onkeypress="if(event.keyCode == 13){ sendMsgInput(); return false;}" style="width: 377px;height: 30px;"/> <input type="button" value="发送到电脑" onclick="sendMsgInput()" id="send_but" >
     </div>
     <div>
-        <textarea style="width:526px;height: 150px;margin-top: 8px;" id="ws_textarea"></textarea>
+        <textarea style="width:96%;height: 150px;margin-top: 8px;" id="ws_textarea"></textarea>
     </div>
   
 

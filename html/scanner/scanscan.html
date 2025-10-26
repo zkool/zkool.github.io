@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>手机H5扫一扫-简道云</title>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?63bc2ef27984b3f99d7c9c3cef8d26be";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <style>
+        /* 基础样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script src="html5-qrcode.min.js"></script>
+<script src="ScanModal.js"></script>
+
+<script>
+
+    // 示例调用
+    var codeId = 0;
+    function showExampleScanModal() {
+        showScanModal((decodedText, decodedResult) => {
+            console.log(`Scan result ${decodedText}`, decodedResult);
+            codeId++;
+            printScanResultPretty(codeId, decodedText, decodedResult);
+        });
+    }
+
+
+    /** Ugly function to write the results to a table dynamically. */
+    function printScanResultPretty(codeId, decodedText, decodedResult) {
+        //弹窗 iframe 向父页面发消息
+        parent.postMessage({pluginMessage: decodedText}, '*')
+    }
+
+    showExampleScanModal();
+</script>
+</body>
+</html>
