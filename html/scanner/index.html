@@ -17,6 +17,8 @@
 </head>
 
 <body>
+    <div>前些天发现了一个巨牛的人工智能学习网站，通俗易懂，风趣幽默，忍不住分享一下给大家。<a href="https://www.captainbed.cn/zk" target="_blank">点击跳转到网站</a></div>
+    <br/>
     <div>
        <span>WebSocket Server wss://</span> <input type="text" id="ws_input" /> <input type="button" value="连接" onclick="connectServer()" id="connect_but" >
        <a href="https://mp.weixin.qq.com/s/TAMKg-UtxGTqg3rNmBqAVg" target="_blank">使用教程</a> | 
@@ -26,7 +28,7 @@
     <div>
         <textarea style="width:96%;height: 100px;margin-top: 5px;" id="ws_textarea"></textarea>
     </div>
-    <div id="qr-reader" style="width:500px"></div>
+    <div id="qr-reader" style="width:97.6%"></div>
     <div id="qr-reader-results"></div>
 </body>
 <script src="html5-qrcode.min.js"></script>
@@ -124,7 +126,6 @@ docReady(function() {
 //010505047461080420131730031311250313213166032511240ICB00I0225
 //]C10250195500913501412087756200797210B212100001
 let ruleBaseList = initRuleBase();
-console.log(JSON.stringify(ruleBaseList))
 // printScanResultPretty(1, ']C10250195500913501412087756200797210B212100001', {result: {format: {formatName:'CODE_128'}}}, ruleBaseList);
 // printScanResultPretty(1, '010505047461080420131730031311250313213166032511240ICB00I0225', {result: {format: {formatName:'CODE_128'}}}, ruleBaseList);
 // printScanResultPretty(1, 'abgdfsdfds', {result: {format: {formatName:'CODE_128'}}}, ruleBaseList);
